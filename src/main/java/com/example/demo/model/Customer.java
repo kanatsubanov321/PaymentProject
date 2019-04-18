@@ -10,6 +10,7 @@ public class Customer {
     private Long id;
     private String name;
     private boolean isActive;
+    private String phone;
 
     @ManyToOne
     @JoinColumn(name = "wallet_id")
@@ -18,17 +19,27 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Long id, String name, boolean isActive, Wallet wallet) {
+    public Customer(Long id, String name, boolean isActive, String phone, Wallet wallet) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
+        this.phone = phone;
         this.wallet = wallet;
     }
 
-    public Customer(String name, boolean isActive, Wallet wallet) {
+    public Customer(String name, boolean isActive, String phone, Wallet wallet) {
         this.name = name;
         this.isActive = isActive;
+        this.phone = phone;
         this.wallet = wallet;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Wallet getWallet() {

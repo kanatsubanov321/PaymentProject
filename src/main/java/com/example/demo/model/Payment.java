@@ -1,51 +1,70 @@
 package com.example.demo.model;
 
+import com.example.demo.enums.Status;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Entity
 @Table(name = "payment")
 public class Payment {
+    public static Random r = new Random();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    private Status status;
 
     private BigDecimal amount;
 
+    private int confirmationCode;
+
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "internet_id")
+    private Internet internet;
 
     private LocalDateTime time;
 
     public Payment() {
     }
 
-    public Payment(Long id, String status, BigDecimal amount, Customer client) {
+    public Payment(Long id, Status status, BigDecimal amount) {
         this.id = id;
         this.status = status;
         this.amount = amount;
-        this.customer = client;
-
         this.time = LocalDateTime.now();
     }
 
-    public Payment(BigDecimal amount, Customer client) {
+    public Payment(BigDecimal amount, Internet internet) {
         this.amount = amount;
-        this.customer = client;
+        this.internet = internet;
 
         this.time = LocalDateTime.now();
 
         if (amount.remainder(BigDecimal.valueOf(2))
-                .equals(BigDecimal.ZERO)){
-            this.status = "OK";
+                .equals(BigDecimal.ZERO)) {
+            setStatus(Status.Waiting);
+            this.confirmationCode = r.nextInt(9999);
+        } else {
+            setStatus(Status.Error);
         }
-        else {
-            this.status = "ERROR";
-        }
+    }
+
+    public Internet getInternet() {
+        return internet;
+    }
+
+    public void setInternet(Internet internet) {
+        this.internet = internet;
+    }
+
+    public int getConfirmationCode() {
+        return confirmationCode;
+    }
+
+    public void setConfirmationCode(int confirmationCode) {
+        this.confirmationCode = confirmationCode;
     }
 
     public Long getId() {
@@ -56,11 +75,11 @@ public class Payment {
         this.id = id;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -70,14 +89,6 @@ public class Payment {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public LocalDateTime getTime() {

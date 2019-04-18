@@ -1,12 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Customer;
-import com.example.demo.model.Wallet;
 import com.example.demo.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -22,7 +20,11 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable Long id) {
+    public Customer getCustomerById(@PathVariable Long id,
+                                    @RequestHeader(name = "customer-phone") String customerPhone) {
+        if (!customerService.checkCustomerPhone(id, customerPhone)) {
+            return null;
+        }
         return this.customerService.findCustomerById(id);
     }
 
@@ -33,8 +35,48 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}/sum")
-    private BigDecimal getSum(@PathVariable Long id){
+    private BigDecimal getSum(@PathVariable Long id,
+                              @RequestHeader(name = "customer-phone") String customerPhone) {
+        if (!customerService.checkCustomerPhone(id, customerPhone)) {
+            return null;
+        }
         return customerService.getSumPayments(id);
+    }
+
+    @GetMapping("/{id}/balance")
+    private int getCustomerBalance(@PathVariable Long id,
+                                   @RequestHeader(name = "customer-phone") String customerPhone) {
+        if (!customerService.checkCustomerPhone(id, customerPhone)) {
+            return 0;
+        }
+        return customerService.getCustomerBalance(id);
+    }
+
+    @GetMapping("/{id}/phone")
+    private int getCustomerPhone(@PathVariable Long id,
+                                 @RequestHeader(name = "customer-phone") String customerPhone) {
+        if (!customerService.checkCustomerPhone(id, customerPhone)) {
+            return 0;
+        }
+        return customerService.getCustomerPhone(id);
+    }
+
+    @GetMapping("/{id}/info")
+    private List<Object[]> getCustomerInfo(@PathVariable Long id,
+                                 @RequestHeader(name = "customer-phone") String customerPhone) {
+        if (!customerService.checkCustomerPhone(id, customerPhone)) {
+            return null;
+        }
+        return customerService.getCustomerInfo(id);
+    }
+
+    @GetMapping("/{id}/code")
+    private int getCustomerConfirmationCode(@PathVariable Long id,
+                                            @RequestHeader(name = "customer-phone") String customerPhone) {
+        if (!customerService.checkCustomerPhone(id, customerPhone)) {
+            return 0;
+        }
+        return customerService.getCustomerConfirmationCode(id);
     }
 
     @PutMapping

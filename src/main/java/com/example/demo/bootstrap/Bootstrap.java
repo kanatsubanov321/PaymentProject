@@ -1,10 +1,11 @@
 package com.example.demo.bootstrap;
 
 import com.example.demo.model.Customer;
+import com.example.demo.model.Internet;
 import com.example.demo.model.Payment;
 import com.example.demo.model.Wallet;
 import com.example.demo.service.CustomerService;
-
+import com.example.demo.service.InternetService;
 import com.example.demo.service.PaymentService;
 import com.example.demo.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class Bootstrap implements CommandLineRunner {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private InternetService internetService;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -36,17 +40,28 @@ public class Bootstrap implements CommandLineRunner {
         Wallet wallet3 = new Wallet("Visa", 7000);
         walletService.saveWallet(wallet3);
 
-        Customer customer = new Customer("Islam Turanov", true, wallet);
+        Customer customer = new Customer("Kanat Subanov", false, "222", wallet);
         customerService.saveCustomer(customer);
-        Customer customer1 = new Customer("Kanat Subanov", true, wallet1);
+        Customer customer1 = new Customer("Islam Egemberdiev", false, "777", wallet1);
         customerService.saveCustomer(customer1);
-        Customer customer2 = new Customer("Uluk Aliev", false, wallet2);
+        Customer customer2 = new Customer("Uluk Aliev", false, "555", wallet2);
         customerService.saveCustomer(customer2);
-        Customer customer3 = new Customer("Altyn Samiev", false, wallet3);
+        Customer customer3 = new Customer("Altyn Samiev", false, "707", wallet3);
         customerService.saveCustomer(customer3);
 
-        Payment payment = new Payment(BigDecimal.TEN, customer);
+        Internet internet = new Internet("Megaline", 800, customer);
+        internetService.saveInternet(internet);
+
+        Internet internet1 = new Internet("Aknet", 1200, customer1);
+        internetService.saveInternet(internet1);
+
+        Internet internet2 = new Internet("Homeline", 1000, customer2);
+        internetService.saveInternet(internet2);
+
+        Payment payment = new Payment(BigDecimal.TEN, internet);
         paymentService.addPayment(payment);
 
+        Payment payment1 = new Payment(BigDecimal.ONE, internet1);
+        paymentService.addPayment(payment1);
     }
 }
