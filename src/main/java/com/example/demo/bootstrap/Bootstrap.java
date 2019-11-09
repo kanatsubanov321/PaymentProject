@@ -8,7 +8,6 @@ import com.example.demo.service.CustomerService;
 import com.example.demo.service.InternetService;
 import com.example.demo.service.PaymentService;
 import com.example.demo.service.WalletService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,17 +15,23 @@ import java.math.BigDecimal;
 
 @Component
 public class Bootstrap implements CommandLineRunner {
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
-    @Autowired
-    private WalletService walletService;
+    private final WalletService walletService;
 
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
 
-    @Autowired
-    private InternetService internetService;
+    private final InternetService internetService;
+
+    public Bootstrap(CustomerService customerService,
+                     WalletService walletService,
+                     PaymentService paymentService,
+                     InternetService internetService) {
+        this.customerService = customerService;
+        this.walletService = walletService;
+        this.paymentService = paymentService;
+        this.internetService = internetService;
+    }
 
     @Override
     public void run(String... args) throws Exception {

@@ -2,15 +2,17 @@ package com.example.demo.service;
 
 import com.example.demo.model.Wallet;
 import com.example.demo.repository.WalletRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class WalletServicelmpl implements WalletService {
-    @Autowired
-    private WalletRepository w;
+public class WalletServiceImpl implements WalletService {
+    private final WalletRepository w;
+
+    public WalletServiceImpl(WalletRepository w) {
+        this.w = w;
+    }
 
     @Override
     public List<Wallet> findAllWallets() {

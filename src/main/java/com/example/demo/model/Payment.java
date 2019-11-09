@@ -9,7 +9,7 @@ import java.util.Random;
 @Entity
 @Table(name = "payment")
 public class Payment {
-    public static Random r = new Random();
+    private static Random r = new Random();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

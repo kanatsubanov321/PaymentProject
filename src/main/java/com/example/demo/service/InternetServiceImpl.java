@@ -2,14 +2,17 @@ package com.example.demo.service;
 
 import com.example.demo.model.Internet;
 import com.example.demo.repository.InternetRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
-public class InternetServicelmpl implements InternetService {
-    @Autowired
-    InternetRepository internetRepository;
+public class InternetServiceImpl implements InternetService {
+    private final InternetRepository internetRepository;
+
+    public InternetServiceImpl(InternetRepository internetRepository) {
+        this.internetRepository = internetRepository;
+    }
 
     @Override
     public List<Internet> findAllInternets() {

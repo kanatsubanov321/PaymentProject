@@ -1,21 +1,22 @@
 package com.example.demo.service;
 
-import com.example.demo.enums.Status;
 import com.example.demo.model.Customer;
 import com.example.demo.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class CustomerServicelmpl implements CustomerService {
-    @Autowired
-    private CustomerRepository c;
+public class CustomerServiceImpl implements CustomerService {
+    private final CustomerRepository c;
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
+
+    public CustomerServiceImpl(CustomerRepository c, CustomerService customerService) {
+        this.c = c;
+        this.customerService = customerService;
+    }
 
     @Override
     public List<Customer> findAllCustomers() {
@@ -55,10 +56,7 @@ public class CustomerServicelmpl implements CustomerService {
 
     @Override
     public boolean checkCustomerPhone(Long id, String phone) {
-        if(customerService.findCustomerById(id).getPhone().equals(phone)){
-            return true;
-        }
-        return false;
+        return customerService.findCustomerById(id).getPhone().equals(phone);
     }
 
     @Override

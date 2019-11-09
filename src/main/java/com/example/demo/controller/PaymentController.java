@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
 import java.io.PrintWriter;
@@ -18,10 +17,14 @@ import java.util.List;
 @RequestMapping("api/v1/payment")
 public class PaymentController extends HttpServlet {
 
-    @Autowired
-    private PaymentService paymentService;
-    @Autowired
-    private CustomerService customerService;
+    private final PaymentService paymentService;
+    private final CustomerService customerService;
+
+    public PaymentController(PaymentService paymentService,
+                             CustomerService customerService) {
+        this.paymentService = paymentService;
+        this.customerService = customerService;
+    }
 
     @GetMapping
     private List<Payment> getAllPayments() {
@@ -48,18 +51,9 @@ public class PaymentController extends HttpServlet {
     @RequestMapping(value = "/confirm/{id}", method = RequestMethod.POST)
     private void confirm(@RequestBody ConfirmationCode code, Payment payment,
                          Customer customer, Wallet wallet, Internet internet,
-                         HttpServletResponse resp,
-                         @PathParam("/{id}") Long id) throws Exception {
-        boolean result = true;
-        try {
-            paymentService.addConfirmationCode(code, payment, customer, wallet, internet);
-            if (!paymentService.addConfirmationCode(code, payment, customer, wallet, internet)) {
-                result = false;
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+                         HttpServletResponse resp) throws Exception {
         PrintWriter out = resp.getWriter();
-        out.println(result ? "You have successfully paid for the Internet" : "You entered an incorrect confirmation code");
+        out.println(paymentService.addConfirmationCode(code, payment, customer, wallet, internet)
+                ? "You have successfully paid for the Internet" : "You entered an incorrect confirmation code");
     }
 }
